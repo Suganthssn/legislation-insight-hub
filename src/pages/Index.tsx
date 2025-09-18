@@ -4,7 +4,12 @@ import { KeywordGalaxy } from '@/components/KeywordGalaxy';
 import { InteractiveSummaries } from '@/components/InteractiveSummaries';
 import { TopInsightsWidget } from '@/components/TopInsightsWidget';
 import { SentimentDashboard } from '@/components/SentimentDashboard';
+import { MicroInsightsPanel } from '@/components/MicroInsightsPanel';
+import { SmartHighlights } from '@/components/SmartHighlights';
+import { EmojiMoodSummary } from '@/components/EmojiMoodSummary';
 import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Sparkles, RefreshCw } from 'lucide-react';
 import { 
   sampleComments, 
   sampleKeywords, 
@@ -12,10 +17,16 @@ import {
   sentimentData, 
   timeSeriesData 
 } from '@/data/sampleData';
+import { 
+  microInsightsData, 
+  smartHighlights, 
+  emojiMoodData 
+} from '@/data/enhancedSampleData';
 
 const Index = () => {
   const [selectedKeyword, setSelectedKeyword] = useState<string | null>(null);
   const [sentimentFilter, setSentimentFilter] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
 
   const handleKeywordClick = (keyword: string) => {
     setSelectedKeyword(selectedKeyword === keyword ? null : keyword);
@@ -23,6 +34,19 @@ const Index = () => {
 
   const handleSentimentFilter = (sentiment: string | null) => {
     setSentimentFilter(sentiment);
+  };
+
+  const handleViewComment = (commentId: string) => {
+    // Scroll to comment in summaries section
+    const element = document.getElementById(`comment-${commentId}`);
+    element?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    // Simulate AI refresh
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    setRefreshing(false);
   };
 
   // Filter comments based on selected filters
@@ -44,12 +68,23 @@ const Index = () => {
             AI-powered analysis of stakeholder feedback on draft legislation
           </p>
           
-          {/* Legislation info card */}
-          <Card className="glass-card p-6 max-w-2xl mx-auto">
+          {/* Legislation info card with refresh button */}
+          <Card className="ios-card p-6 max-w-2xl mx-auto">
             <div className="space-y-2">
-              <h2 className="text-xl font-semibold text-foreground">
-                📋 Current Consultation: Digital Services Modernization Act
-              </h2>
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-semibold text-foreground">
+                  📋 Current Consultation: Digital Services Modernization Act
+                </h2>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={handleRefresh}
+                  disabled={refreshing}
+                  className="hover:bg-primary/10"
+                >
+                  <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
+                </Button>
+              </div>
               <p className="text-sm text-muted-foreground">
                 Public comment period: March 1-31, 2024 • 76 submissions received
               </p>
@@ -85,6 +120,24 @@ const Index = () => {
           <div className="lg:col-span-1">
             <TopInsightsWidget insights={sampleInsights} />
           </div>
+        </div>
+
+        {/* Enhanced insights row */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Micro-insights */}
+          <MicroInsightsPanel {...microInsightsData} />
+          
+          {/* Smart highlights */}
+          <SmartHighlights 
+            highlights={smartHighlights}
+            onViewComment={handleViewComment}
+          />
+          
+          {/* Emoji mood summary */}
+          <EmojiMoodSummary 
+            moods={emojiMoodData}
+            totalComments={microInsightsData.totalComments}
+          />
         </div>
 
         {/* Interactive Summaries */}
