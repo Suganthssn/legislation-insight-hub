@@ -47,6 +47,22 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        sentiment: {
+          positive: "hsl(var(--sentiment-positive))",
+          "positive-glow": "hsl(var(--sentiment-positive-glow))",
+          negative: "hsl(var(--sentiment-negative))",
+          "negative-glow": "hsl(var(--sentiment-negative-glow))",
+          neutral: "hsl(var(--sentiment-neutral))",
+          "neutral-glow": "hsl(var(--sentiment-neutral-glow))",
+        },
+        star: {
+          bright: "hsl(var(--star-bright))",
+          dim: "hsl(var(--star-dim))",
+        },
+        nebula: {
+          primary: "hsl(var(--nebula-primary))",
+          secondary: "hsl(var(--nebula-secondary))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
